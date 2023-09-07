@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap  
+metadata:  
+  name: mysql-cm
+data:
+  mysql_usrmgmt.sql: |-
+    DROP DATABASE IF EXISTS usermgmt;
+    CREATE DATABASE usermgmt;

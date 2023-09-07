@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind : Deployment 
+metadata:
+  name: mysql-deployment
+  labels: 
+    app : mysql-backend
+    tier: backend 
+    
+spec: 
+  replica: 1
+  selector: 
+    matchLabel: 
+      app: mysql-backend
+  template:   
+    metadata:
+      label: 
+        app: mysql-backend  
+    spec:   
+      containers:
+       - image:  mysql:5.6
+         name: mysql
+         env:
+           - name:  MYSQL_ROOT_PASSWORD
+             value: mysqlpass
+         ports:
+         - name:  mysql
+           containerPort: 3306
+         volumeMounts:
+           - name: persistent-storage 
+             mountPath: /var/lib/mysql
+           - name: usermanagement-dbcreation-script
+             mountPath: /docker-entrypoint-initdb.d     
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+        - name : configmap-script
+          configMap: 
+            name: mysql-cm         
